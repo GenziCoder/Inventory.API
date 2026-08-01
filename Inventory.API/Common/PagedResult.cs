@@ -2,7 +2,7 @@
 {
     public class PagedResult<T>
     {
-        public IEnumerable<T> Items { get; set; } = Enumerable.Empty<T>();
+        public IEnumerable<T> Data { get; set; } = Enumerable.Empty<T>();
 
         public int PageNumber { get; set; }
 

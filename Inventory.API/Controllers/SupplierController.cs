@@ -19,9 +19,9 @@ namespace Inventory.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll([FromQuery] QueryParameters query)
+        public async Task<IActionResult> GetAll(string? search, int pageNumber = 1, int pageSize = 10)
         {
-            return Ok(await _service.GetAllAsync(query));
+            return Ok(await _service.GetAllAsync(search,pageNumber,pageSize));
         }
 
         [HttpGet("{id}")]

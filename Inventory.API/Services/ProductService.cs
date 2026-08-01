@@ -21,7 +21,7 @@ namespace Inventory.API.Services
 
             return new PagedResult<ProductDto>
             {
-                Items = result.Items.Select(p => new ProductDto
+                Data = result.Data.Select(p => new ProductDto
                 {
                     Id = p.Id,
                     ProductCode = p.ProductCode,

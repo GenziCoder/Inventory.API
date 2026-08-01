@@ -1,4 +1,5 @@
-﻿using Inventory.API.DTOs.Supplier;
+﻿using Inventory.API.Common;
+using Inventory.API.DTOs.Supplier;
 using Inventory.API.Entities;
 using Inventory.API.Helpers;
 using Inventory.API.Interfaces;
@@ -14,11 +15,11 @@ namespace Inventory.API.Services
             _repository = repository;
         }
 
-        public async Task<IEnumerable<SupplierDto>> GetAllAsync(QueryParameters query)
+        public async Task<PagedResponse<SupplierDto>> GetAllAsync(string? search, int pageNumber, int pageSize)
         {
-            var suppliers = await _repository.GetAllAsync(query);
-
-            return suppliers.Select(s => new SupplierDto
+            var suppliers = await _repository.GetAllAsync(search,pageNumber,pageSize);
+            var totalCount = await _repository.GetTotalCountAsync(search);
+            var data = suppliers.Select(s => new SupplierDto
             {
                 Id = s.Id,
                 SupplierCode = s.SupplierCode,
@@ -33,8 +34,15 @@ namespace Inventory.API.Services
                 PostalCode = s.PostalCode,
                 IsActive = s.IsActive
 
-            });
+            }).ToList();
+
+            return new PagedResponse<SupplierDto>(
+                data,
+                totalCount,
+                pageNumber,
+                pageSize);
         }
+
 
         public async Task<SupplierDto?> GetByIdAsync(int id)
         {

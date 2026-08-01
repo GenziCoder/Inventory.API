@@ -5,8 +5,9 @@ namespace Inventory.API.Interfaces
 {
     public interface ISupplierRepository
     {
-        Task<IEnumerable<Supplier>> GetAllAsync(QueryParameters query);
+        Task<IEnumerable<Supplier>> GetAllAsync(string? search, int pageNumber, int pageSize);
 
+        Task<int> GetTotalCountAsync(string? search);
         Task<Supplier?> GetByIdAsync(int id);
 
         Task<Supplier?> GetBySupplierCodeAsync(string supplierCode);

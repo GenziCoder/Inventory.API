@@ -52,7 +52,7 @@ namespace Inventory.API.Repositories
 
             return new PagedResult<Product>
             {
-                Items = items,
+                Data = items,
                 PageNumber = query.PageNumber,
                 PageSize = query.PageSize,
                 TotalRecords = totalRecords,
