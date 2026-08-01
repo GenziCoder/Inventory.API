@@ -10,7 +10,7 @@ namespace Inventory.API.Interfaces
 
         Task<bool> CreateAsync(CreateCategoryDto dto);
 
-        Task<bool> UpdateAsync(UpdateCategoryDto dto);
+        Task<bool> UpdateAsync(int Id, UpdateCategoryDto dto);
 
         Task<bool> DeleteAsync(int id);
     }

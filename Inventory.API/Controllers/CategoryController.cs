@@ -1,8 +1,11 @@
-﻿using Inventory.API.DTOs.Category;
+﻿using AutoMapper;
+using Inventory.API.Common;
+using Inventory.API.DTOs.Category;
 using Inventory.API.Helpers;
 using Inventory.API.Interfaces;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System.Collections;
 
 namespace Inventory.API.Controllers
 {
@@ -12,29 +15,71 @@ namespace Inventory.API.Controllers
     public class CategoryController : ControllerBase
     {
         private readonly ICategoryService _categoryService;
+        private readonly IMapper _mapper;
 
-        public CategoryController(ICategoryService categoryService)
+        public CategoryController(ICategoryService categoryService,IMapper mapper)
         {
             _categoryService = categoryService;
+            _mapper=mapper;
         }
 
         // GET: api/Category
-        [HttpGet]
-        public async Task<IActionResult> GetAll()
-        {
-            //throw new Exception("Testing Global Exception");
-            var categories = await _categoryService.GetAllAsync();
+        //[HttpGet]
+        //public async Task<IActionResult> GetAll(string? search = "", int pageNumber = 1, int pageSize = 10)
+        //{
+        //    //throw new Exception("Testing Global Exception");
+        //    IEnumerable categories = await _categoryService.GetAllAsync();
 
-            //return Ok(categories);
-            //return Ok(
-            //            new ApiResponse<IEnumerable<CategoryDto>>
-            //            (
-            //                true,
-            //                "Categories fetched successfully.",
-            //                categories
-            //            ));
-            return Ok(ApiResponse<IEnumerable<CategoryDto>>.SuccessResponse(categories,"Success"));
+        //     var result = await categories.Contains(search);
+            
+        //    //return Ok(categories);
+        //    //return Ok(
+        //    //            new ApiResponse<IEnumerable<CategoryDto>>
+        //    //            (
+        //    //                true,
+        //    //                "Categories fetched successfully.",
+        //    //                categories
+        //    //            ));
+        //    return Ok(ApiResponse<IEnumerable<CategoryDto>>.SuccessResponse(result, "Categories fetch Successfully !!"));
+        //}
+
+        [HttpGet]
+        public async Task<IActionResult> GetAll(string? search = "", int pageNumber = 1, int pageSize = 10)
+        {
+            var query = await _categoryService.GetAllAsync();
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                query = query.Where(x =>
+                    x.Name.Contains(search,StringComparison.OrdinalIgnoreCase));
+             //   filtered = filtered.Where(x =>
+             //!string.IsNullOrEmpty(x.Name) &&
+             //x.Name.Contains(search, StringComparison.OrdinalIgnoreCase));
+            }
+
+            var totalRecords =  query.Count();
+
+            var categories =  query
+                .OrderBy(x => x.Name)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+            var categoryDtos = _mapper.Map<List<CategoryDto>>(categories);
+
+            var response = new PagedResponse<CategoryDto>(
+                categoryDtos,
+                totalRecords,
+                pageNumber,
+                pageSize
+            );
+
+            response.Success = true;
+            response.Message = "Categories fetched successfully.";
+
+            return Ok(response);
+          
         }
+
 
         // GET: api/Category/5
         [HttpGet("{id}")]
@@ -78,7 +123,7 @@ namespace Inventory.API.Controllers
         [Authorize(Roles =Roles.Admin+","+Roles.Manager)]
         public async Task<IActionResult> Update(int id, UpdateCategoryDto dto)
         {
-            if (id != dto.Id)
+            if (id == 0)
                 return BadRequest(ApiResponse<Object>.FailureResponse("Id mismatch.", null));
                     //new ApiResponse<object>
                     //(
@@ -88,7 +133,7 @@ namespace Inventory.API.Controllers
                     //));
             //return BadRequest("Id mismatch.");
 
-            var result = await _categoryService.UpdateAsync(dto);
+            var result = await _categoryService.UpdateAsync(id,dto);
 
             if (!result)
                 return NotFound(ApiResponse<object>.FailureResponse("Category deleted successfully.",null));

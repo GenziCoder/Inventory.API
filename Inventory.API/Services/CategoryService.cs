@@ -55,23 +55,23 @@ namespace Inventory.API.Services
             return true;
         }
 
-        public async Task<bool> UpdateAsync(UpdateCategoryDto dto)
+        public async Task<bool> UpdateAsync(int Id,UpdateCategoryDto dto)
         {
             var category =
-                await _repository.GetByIdAsync(dto.Id);
+                await _repository.GetByIdAsync(Id);
 
             if (category == null)
                 return false;
 
             category.Name = dto.Name;
             category.Description = dto.Description;
-            category.IsActive = dto.IsActive;
+            category.IsActive = true;
             category.UpdatedDate = DateTime.UtcNow;
 
             await _repository.UpdateAsync(category);
 
             await _repository.SaveChangesAsync();
-            _logger.LogInformation("Updating category Id: {CategoryId}", dto.Id);
+            _logger.LogInformation("Updating category Id: {CategoryId}", Id);
             return true;
         }
 

@@ -1,4 +1,6 @@
-﻿namespace Inventory.API.DTOs.Dashboard
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Inventory.API.DTOs.Dashboard
 {
     public class DashboardDto
     {
@@ -15,11 +17,10 @@
         public int OutOfStockProducts { get; set; }
 
         public decimal TodaySales { get; set; }
-
         public decimal TodayPurchases { get; set; }
-
+        [DisplayFormat(DataFormatString ="{0:F2}")]
         public decimal MonthlySales { get; set; }
-
+        [DisplayFormat(DataFormatString = "{0:F2}")]
         public decimal MonthlyPurchases { get; set; }
     }
 }

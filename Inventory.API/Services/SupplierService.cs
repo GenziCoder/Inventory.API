@@ -32,6 +32,7 @@ namespace Inventory.API.Services
                 Country = s.Country,
                 PostalCode = s.PostalCode,
                 IsActive = s.IsActive
+
             });
         }
 

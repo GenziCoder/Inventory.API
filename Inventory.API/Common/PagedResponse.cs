@@ -15,6 +15,8 @@
         public bool HasPreviousPage => PageNumber > 1;
 
         public bool HasNextPage => PageNumber < TotalPages;
+        public string? Message { get; set; }
+        public bool? Success { get; set; }
 
         public PagedResponse(
             IEnumerable<T> data,

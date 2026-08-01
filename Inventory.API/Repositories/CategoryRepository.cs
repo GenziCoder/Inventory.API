@@ -13,7 +13,7 @@ namespace Inventory.API.Repositories
         {
             _context = context;
         }
-
+        
         public async Task<IEnumerable<Category>> GetAllAsync()
         {
             return await _context.Categories

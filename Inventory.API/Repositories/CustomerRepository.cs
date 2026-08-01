@@ -19,7 +19,7 @@ namespace Inventory.API.Repositories
             int pageNumber,
             int pageSize)
         {
-            IQueryable<Customer> query = _context.Customers;
+            IQueryable<Customer> query = _context.Customers.Where(x=>x.IsActive);
 
             if (!string.IsNullOrWhiteSpace(search))
             {
@@ -39,7 +39,7 @@ namespace Inventory.API.Repositories
 
         public async Task<int> GetTotalCountAsync(string? search)
         {
-            IQueryable<Customer> query = _context.Customers;
+            IQueryable<Customer> query = _context.Customers.Where(x=>x.IsActive);
 
             if (!string.IsNullOrWhiteSpace(search))
             {
