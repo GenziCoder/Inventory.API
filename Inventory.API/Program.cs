@@ -28,7 +28,21 @@ internal class Program
     private static async Task Main(string[] args)
     {
         QuestPDF.Settings.License = LicenseType.Community;
-        var builder = WebApplication.CreateBuilder(args);
+        var options = new WebApplicationOptions
+        {
+            Args = args
+        };
+        var builder = WebApplication.CreateBuilder(options);
+        builder.Configuration.Sources.Clear();
+
+        builder.Configuration
+    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: false)
+    .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json",
+                 optional: true,
+                 reloadOnChange: false)
+    .AddEnvironmentVariables();
+
+
         // Configure Serilog
         Log.Logger = new LoggerConfiguration()
             .ReadFrom.Configuration(builder.Configuration)
@@ -243,7 +257,7 @@ internal class Program
 
         app.UseCors("AngularPolicy");
 
-        app.UseMiddleware<ExceptionMiddleware>();
+       // app.UseMiddleware<ExceptionMiddleware>();
 
         app.UseAuthentication();
 
