@@ -192,10 +192,17 @@ internal class Program
         builder.Services.AddScoped<IExportService, ExportService>();
 
         // Register DbContext
-        builder.Services.AddDbContext<ApplicationDbContext>(options =>
-        options.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"),
-        ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("DefaultConnection"))));
+        //builder.Services.AddDbContext<ApplicationDbContext>(options =>
+        //options.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"),
+        //ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("DefaultConnection"))));
+        var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
+        builder.Services.AddDbContext<ApplicationDbContext>(options =>
+        {
+            options.UseMySql(
+                connectionString,
+                ServerVersion.AutoDetect(connectionString));
+        });
         builder.Services.Configure<JwtSettings>(
             builder.Configuration.GetSection("Jwt"));
         var jwtSection = builder.Configuration.GetSection("Jwt");
