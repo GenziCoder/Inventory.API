@@ -17,20 +17,56 @@ namespace Inventory.API.Controllers
             _service = service;
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetAll(
+            string? search = "",
+            int pageNumber = 1,
+            int pageSize = 10)
+        {
+            return Ok(await _service.GetAllAsync(
+                search,
+                pageNumber,
+                pageSize));
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            var sale = await _service.GetByIdAsync(id);
+
+            if (sale == null)
+                return NotFound();
+
+            return Ok(sale);
+        }
+
         [HttpPost]
-        [Authorize(Roles = Roles.Admin+","+Roles.Manager+","+Roles.Employee)]
+        [Authorize(Roles = Roles.Admin + "," + Roles.Manager)]
         public async Task<IActionResult> Create(CreateSaleDto dto)
         {
-            var result = await _service.CreateSaleAsync(dto);
+            await _service.CreateSaleAsync(dto);
 
-            if (!result)
-                return BadRequest();
+            return Ok("Sale created successfully.");
+        }
 
-            return Ok(new
-            {
-                Success = true,
-                Message = "Sale completed successfully."
-            });
+        [HttpPut("{id}")]
+        [Authorize(Roles = Roles.Admin + "," + Roles.Manager)]
+        public async Task<IActionResult> Update(
+            int id,
+            UpdateSaleDto dto)
+        {
+            await _service.UpdateSaleAsync(id, dto);
+
+            return Ok("Sale updated successfully.");
+        }
+
+        [HttpDelete("{id}")]
+        [Authorize(Roles = Roles.Admin + "," + Roles.Manager)]
+        public async Task<IActionResult> Delete(int id)
+        {
+            await _service.DeleteSaleAsync(id);
+
+            return Ok("Sale deleted successfully.");
         }
     }
 }

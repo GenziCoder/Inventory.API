@@ -2,22 +2,23 @@
 
 namespace Inventory.API.DTOs.Sale
 {
-    public class CreateSaleDto
+    public class UpdateSaleDto
     {
+        [Required]
         public int CustomerId { get; set; }
-        //public string? CustomerName { get; set; }
 
-        //public string? CustomerPhone { get; set; }
-
+        [Required]
         public DateTime SaleDate { get; set; }
 
+        [MaxLength(500)]
         public string? Remarks { get; set; }
 
+        [Required]
         [MinLength(1)]
-        public List<CreateSaleItemDto> Items { get; set; } = new();
+        public List<UpdateSaleItemDto> Items { get; set; } = [];
     }
 
-    public class CreateSaleItemDto
+    public class UpdateSaleItemDto
     {
         [Required]
         public int ProductId { get; set; }
@@ -28,4 +29,6 @@ namespace Inventory.API.DTOs.Sale
         [Range(typeof(decimal), "0.01", "999999999")]
         public decimal UnitPrice { get; set; }
     }
+
+
 }

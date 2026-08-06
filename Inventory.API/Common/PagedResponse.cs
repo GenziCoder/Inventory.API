@@ -18,6 +18,10 @@
         public string? Message { get; set; }
         public bool? Success { get; set; }
 
+        //public PagedResponse()
+        //{
+
+        //}
         public PagedResponse(
             IEnumerable<T> data,
             int totalRecords,

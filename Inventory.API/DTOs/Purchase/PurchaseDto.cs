@@ -7,6 +7,8 @@
         public string PurchaseNumber { get; set; } = string.Empty;
 
         public string SupplierName { get; set; } = string.Empty;
+        public int SupplierId { get; set; }
+
 
         public DateTime PurchaseDate { get; set; }
 

@@ -11,7 +11,8 @@ namespace Inventory.API.Interfaces
         ISupplierRepository Suppliers { get; }
 
         IPurchaseRepository Purchases { get; }
-
+        ICustomerRepository  Customers { get; }
+        ISaleRepository Sales { get; }
         Task<int> SaveChangesAsync();
 
         Task BeginTransactionAsync();

@@ -21,26 +21,7 @@ namespace Inventory.API.Controllers
         [HttpGet("summary")]
         public async Task<IActionResult> GetDashboard()
         {
-            var result = await _service.GetDashboardAsync();
-            var response = new ApiResponse<object>()
-            {
-                Success = true,
-                Message = " Dashboard summary",
-                Data = new DashboardDto()
-                {
-                    TotalProducts=result.TotalProducts,
-                    TotalCustomers=result.TotalCustomers,
-                    TotalSuppliers=result.TotalSuppliers,
-                    TotalCategories=result.TotalCategories,
-                    TodayPurchases=result.TodayPurchases,
-                    TodaySales=result.TodaySales,
-                    MonthlyPurchases=result.MonthlyPurchases,
-                    MonthlySales=result.MonthlySales,
-                    LowStockProducts=result.LowStockProducts,
-                    OutOfStockProducts=result.OutOfStockProducts
-                }
-            };
-
+            var response = await _service.GetDashboardSummaryAsync();
             return Ok(response);
         }
     }

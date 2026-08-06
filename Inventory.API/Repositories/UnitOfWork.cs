@@ -17,13 +17,17 @@ namespace Inventory.API.Repositories
         public ISupplierRepository Suppliers { get; }
 
         public IPurchaseRepository Purchases { get; }
+        public ICustomerRepository Customers { get; }
+        public ISaleRepository Sales { get; }
 
         public UnitOfWork(
             ApplicationDbContext context,
             ICategoryRepository categories,
             IProductRepository products,
             ISupplierRepository suppliers,
-            IPurchaseRepository purchases)
+            IPurchaseRepository purchases,
+            ICustomerRepository customers,
+            ISaleRepository sales)
         {
             _context = context;
 
@@ -31,6 +35,8 @@ namespace Inventory.API.Repositories
             Products = products;
             Suppliers = suppliers;
             Purchases = purchases;
+            Customers = customers;
+            Sales = sales;
         }
 
         public async Task<int> SaveChangesAsync()

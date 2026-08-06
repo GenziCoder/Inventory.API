@@ -71,7 +71,7 @@ internal class Program
 
             options.AddFixedWindowLimiter("GlobalPolicy", policy =>
             {
-                policy.PermitLimit = 2;
+                policy.PermitLimit = 2000;
                 policy.Window = TimeSpan.FromMinutes(1);
             });
         });
@@ -79,13 +79,13 @@ internal class Program
         {
             options.AddFixedWindowLimiter("ReadPolicy", policy =>
             {
-                policy.PermitLimit = 500;
+                policy.PermitLimit = 50000;
                 policy.Window = TimeSpan.FromMinutes(1);
             });
 
             options.AddFixedWindowLimiter("WritePolicy", policy =>
             {
-                policy.PermitLimit = 100;
+                policy.PermitLimit = 10000;
                 policy.Window = TimeSpan.FromMinutes(1);
             });
 
@@ -188,6 +188,7 @@ internal class Program
         builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
         builder.Services.AddScoped<ICustomerService, CustomerService>();
         builder.Services.AddScoped<IDashboardService, DashboardService>();
+        builder.Services.AddScoped<IDashboardRepository, DashboardRepository>();    
         builder.Services.AddScoped<IGlobalSearchService, GlobalSearchService>();
         builder.Services.AddScoped<IExportService, ExportService>();
 

@@ -10,10 +10,6 @@ namespace Inventory.API.Entities
 
         public decimal TotalAmount { get; set; }
 
-        //public string? CustomerName { get; set; }
-
-        //public string? CustomerPhone { get; set; }
-
         public int CustomerId { get; set; }
 
         public Customer Customer { get; set; } = null!;

@@ -16,7 +16,7 @@ namespace Inventory.API.Entities
 
         public string? Remarks { get; set; }
 
-        public ICollection<PurchaseDetail> PurchaseDetails { get; set; }= new List<PurchaseDetail>();
+        public ICollection<PurchaseDetail>? PurchaseDetails { get; set; }= new List<PurchaseDetail>();
             
     }
 }

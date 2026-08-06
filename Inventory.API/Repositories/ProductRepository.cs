@@ -19,7 +19,7 @@ namespace Inventory.API.Repositories
         public async Task<PagedResult<Product>> GetAllAsync(QueryParameters query)
         {
             IQueryable<Product> products = _context.Products
-                .Include(p => p.Category);
+                .Include(p => p.Category).Where(p=>p.IsActive);
 
             if (!string.IsNullOrWhiteSpace(query.Search))
             {
@@ -64,18 +64,18 @@ namespace Inventory.API.Repositories
         {
             return await _context.Products
                 .Include(p => p.Category)
-                .FirstOrDefaultAsync(x => x.Id == id);
+                .FirstOrDefaultAsync(x => x.Id == id && x.IsActive);
         }
 
         public async Task<Product?> GetByProductCodeAsync(string productCode)
         {
             return await _context.Products
-                .FirstOrDefaultAsync(x => x.ProductCode == productCode);
+                .FirstOrDefaultAsync(x => x.ProductCode == productCode && x.IsActive);
         }
 
         public async Task<bool> CategoryExistsAsync(int categoryId)
         {
-            return await _context.Categories.AnyAsync(c => c.Id == categoryId);
+            return await _context.Categories.AnyAsync(c => c.Id == categoryId && c.IsActive);
         }
 
         public async Task AddAsync(Product product)
@@ -90,7 +90,8 @@ namespace Inventory.API.Repositories
 
         public void Delete(Product product)
         {
-            _context.Products.Remove(product);
+            product.IsActive = false;
+            //_context.Products.Remove(product);
         }
 
         public async Task SaveChangesAsync()
