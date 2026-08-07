@@ -191,6 +191,9 @@ internal class Program
         builder.Services.AddScoped<IDashboardRepository, DashboardRepository>();    
         builder.Services.AddScoped<IGlobalSearchService, GlobalSearchService>();
         builder.Services.AddScoped<IExportService, ExportService>();
+        builder.Services.AddScoped<IReportRepository, ReportRepository>();
+        builder.Services.AddScoped<IReportService, ReportService>();
+
 
         // Register DbContext
         //builder.Services.AddDbContext<ApplicationDbContext>(options =>
