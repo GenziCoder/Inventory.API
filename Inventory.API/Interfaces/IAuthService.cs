@@ -1,10 +1,11 @@
 ﻿using Inventory.API.DTOs.Auth;
+using Inventory.API.Helpers;
 
 namespace Inventory.API.Interfaces
 {
     public interface IAuthService
     {
-        Task<bool> RegisterAsync(RegisterDto dto);
+        Task<ApiResponse<string>> RegisterAsync(RegisterDto dto);
 
         Task<LoginResponseDto?> LoginAsync(LoginDto dto);
 

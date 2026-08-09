@@ -1,5 +1,6 @@
 ﻿using Inventory.API.DTOs.Auth;
 using Inventory.API.Entities;
+using Inventory.API.Helpers;
 using Inventory.API.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using System.Data;
@@ -28,19 +29,29 @@ namespace Inventory.API.Services
             var randomBytes = RandomNumberGenerator.GetBytes(64);
             return Convert.ToBase64String(randomBytes);
         }
-        public async Task<bool> RegisterAsync(RegisterDto dto)
+        public async Task<ApiResponse<string>> RegisterAsync(RegisterDto dto)
         {
-            var existing = await _repository.GetUserByEmailAsync(dto.Email);
+            var existingEmail = await _repository.GetUserByEmailAsync(dto.Email);
 
-            if (existing != null)
-                return false;
+            if (existingEmail != null)
+                return ApiResponse<string>.FailureResponse("Email already exists.");
+            // Check Username
+            var existingUsername = await _repository.GetUserByUsernameAsync(dto.Username);
+
+            if (existingUsername != null)
+                return ApiResponse<string>.FailureResponse("Username already exists.");
 
             var user = new User
             {
                 FirstName = dto.FirstName,
+                MiddleName = dto.MiddleName,
                 LastName = dto.LastName,
+                Username = dto.Username,
                 Email = dto.Email,
-                Role = dto.Role//"Employee"
+                PhoneNumber = dto.PhoneNumber,
+                Role = dto.Role,
+                IsActive = true,
+
             };
 
             user.PasswordHash =
@@ -49,7 +60,7 @@ namespace Inventory.API.Services
             await _repository.AddUserAsync(user);
             await _repository.SaveChangesAsync();
 
-            return true;
+            return ApiResponse<string>.SuccessResponse("Registration completed successfully.");
         }
 
         public async Task<LoginResponseDto?> LoginAsync(LoginDto dto)
@@ -131,7 +142,10 @@ namespace Inventory.API.Services
 
             if (token == null)
                 return;
-
+            if (token.IsRevoked)
+                return;
+            if (token.ExpiryDate <= DateTime.UtcNow)
+                return;
             token.IsRevoked = true;
 
             await _repository.SaveChangesAsync();

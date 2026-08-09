@@ -19,6 +19,11 @@ namespace Inventory.API.Repositories
             return await _context.Users
                 .FirstOrDefaultAsync(x => x.Email == email);
         }
+        public async Task<User?> GetUserByUsernameAsync(string username)
+        {
+            return await _context.Users
+                .FirstOrDefaultAsync(x => x.Username == username);
+        }
 
         public async Task AddUserAsync(User user)
         {

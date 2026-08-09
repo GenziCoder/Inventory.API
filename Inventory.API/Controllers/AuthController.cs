@@ -25,7 +25,7 @@ namespace Inventory.API.Controllers
         {
             var result = await _authService.RegisterAsync(dto);
 
-            if (!result)
+            if (result==null)
             {
                 return BadRequest(new ApiResponse<object>
                 {
@@ -93,6 +93,7 @@ namespace Inventory.API.Controllers
         }
 
         [HttpPost("logout")]
+        [Authorize]
         public async Task<IActionResult> Logout(RefreshTokenRequestDto dto)
         {
             await _authService.LogoutAsync(dto.RefreshToken);

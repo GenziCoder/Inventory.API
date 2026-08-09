@@ -5,6 +5,7 @@ namespace Inventory.API.Interfaces
     public interface IAuthRepository
     {
         Task<User?> GetUserByEmailAsync(string email);
+        Task<User?> GetUserByUsernameAsync(string username);
 
         Task AddUserAsync(User user);
 

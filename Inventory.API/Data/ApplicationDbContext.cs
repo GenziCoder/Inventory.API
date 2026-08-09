@@ -60,6 +60,14 @@ namespace Inventory.API.Data
             modelBuilder.Entity<User>()
                 .Property(x => x.Role)
                 .HasConversion<string>();
+
+            modelBuilder.Entity<User>()
+                .HasIndex(x => x.Email)
+                .IsUnique();
+
+            modelBuilder.Entity<User>()
+                .HasIndex(x => x.Username)
+                .IsUnique();
         }
       
         public DbSet<Category> Categories { get; set; }
