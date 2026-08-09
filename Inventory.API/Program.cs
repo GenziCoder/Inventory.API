@@ -241,13 +241,13 @@ internal class Program
             };
         });
         var app = builder.Build();
-        using (var scope = app.Services.CreateScope())
-        {
-            var context = scope.ServiceProvider
-                .GetRequiredService<ApplicationDbContext>();
+        //using (var scope = app.Services.CreateScope())
+        //{
+        //    var context = scope.ServiceProvider
+        //        .GetRequiredService<ApplicationDbContext>();
 
-            await DbInitializer.SeedAsync(context);
-        }
+        //    await DbInitializer.SeedAsync(context);
+        //}
         app.UseSerilogRequestLogging();
         app.UseGlobalExceptionMiddleware();
         // Configure the HTTP request pipeline.

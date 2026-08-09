@@ -57,6 +57,9 @@ namespace Inventory.API.Data
                 .WithMany(c => c.Sales)
                 .HasForeignKey(s => s.CustomerId)
                 .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<User>()
+                .Property(x => x.Role)
+                .HasConversion<string>();
         }
       
         public DbSet<Category> Categories { get; set; }
